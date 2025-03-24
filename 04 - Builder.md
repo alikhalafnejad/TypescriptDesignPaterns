@@ -211,3 +211,130 @@ Burger Details:
 - **افزایش قابلیت توسعه**: اضافه کردن ویژگی‌های جدید بدون تغییر در کد موجود امکان‌پذیر است.
 
 ---
+
+بله، حتماً! یک مثال کاربردی و مرتبط با **مهندسی نرم‌افزار** برای **Builder Pattern** این است که فرض کنید در حال توسعه یک سیستم مدیریت API هستید. این سیستم باید درخواست‌های HTTP پیچیده (مثل GET، POST، PUT و DELETE) را با تنظیمات مختلف مانند **Headers**، **Query Parameters**، **Body** و **Authentication** بسازد. 
+
+---
+
+## **مثال: ساخت درخواست HTTP با Builder Pattern**
+
+### **سناریوی واقعی**
+فرض کنید در یک پروژه نرم‌افزاری، نیاز دارید یک کتابخانه برای ارسال درخواست‌های HTTP طراحی کنید. هر درخواست HTTP می‌تواند شامل اجزای مختلفی باشد:
+1. **URL**: آدرس مقصد
+2. **Method**: نوع درخواست (GET, POST, PUT, DELETE)
+3. **Headers**: سربرگ‌های HTTP (مثل `Content-Type`, `Authorization`)
+4. **Query Parameters**: پارامترهای موجود در URL
+5. **Body**: داده‌های ارسالی در بدنه درخواست
+
+با استفاده از **Builder Pattern**، می‌توانید فرآیند ساخت درخواست HTTP را به صورت مرحله‌ای و انعطاف‌پذیر مدیریت کنید.
+
+---
+
+### **پیاده‌سازی در TypeScript**
+
+```typescript
+// کلاس درخواست HTTP
+class HttpRequest {
+    private url: string = "";
+    private method: string = "GET";
+    private headers: { [key: string]: string } = {};
+    private queryParams: { [key: string]: string } = {};
+    private body: any = null;
+
+    setUrl(url: string): void {
+        this.url = url;
+    }
+
+    setMethod(method: string): void {
+        this.method = method;
+    }
+
+    addHeader(key: string, value: string): void {
+        this.headers[key] = value;
+    }
+
+    addQueryParam(key: string, value: string): void {
+        this.queryParams[key] = value;
+    }
+
+    setBody(body: any): void {
+        this.body = body;
+    }
+
+    send(): void {
+        console.log(`Sending ${this.method} request to ${this.url}`);
+        console.log("Headers:", this.headers);
+        console.log("Query Params:", this.queryParams);
+        console.log("Body:", this.body);
+    }
+}
+
+// Builder برای ساخت درخواست HTTP
+class HttpRequestBuilder {
+    private request: HttpRequest;
+
+    constructor() {
+        this.request = new HttpRequest();
+    }
+
+    setUrl(url: string): HttpRequestBuilder {
+        this.request.setUrl(url);
+        return this;
+    }
+
+    setMethod(method: string): HttpRequestBuilder {
+        this.request.setMethod(method);
+        return this;
+    }
+
+    addHeader(key: string, value: string): HttpRequestBuilder {
+        this.request.addHeader(key, value);
+        return this;
+    }
+
+    addQueryParam(key: string, value: string): HttpRequestBuilder {
+        this.request.addQueryParam(key, value);
+        return this;
+    }
+
+    setBody(body: any): HttpRequestBuilder {
+        this.request.setBody(body);
+        return this;
+    }
+
+    build(): HttpRequest {
+        return this.request;
+    }
+}
+
+// استفاده
+const builder = new HttpRequestBuilder();
+const request = builder
+    .setUrl("https://api.example.com/data")
+    .setMethod("POST")
+    .addHeader("Content-Type", "application/json")
+    .addHeader("Authorization", "Bearer token123")
+    .addQueryParam("page", "1")
+    .addQueryParam("limit", "10")
+    .setBody({ name: "John Doe", age: 30 })
+    .build();
+
+request.send();
+```
+
+---
+
+### **خروجی کد**
+```
+Sending POST request to https://api.example.com/data
+Headers: { 'Content-Type': 'application/json', Authorization: 'Bearer token123' }
+Query Params: { page: '1', limit: '10' }
+Body: { name: 'John Doe', age: 30 }
+```
+
+---
+
+### **چطور این الگو به حل مسئله کمک می‌کند؟**
+1. **مدیریت درخواست‌های پیچیده**: این الگو به شما کمک می‌کند که فرآیند ساخت درخواست‌های HTTP را به صورت مرحله‌ای و سازمان‌یافته مدیریت کنید.
+2. **افزایش انعطاف‌پذیری**: می‌توانید اجزای مختلف درخواست را به صورت جداگانه تنظیم کنید و ساخت را سفارشی‌سازی کنید.
+3. **جدا کردن منطق ساخت**: منطق ساخت درخواست از اجرای آن (ارسال) جدا می‌شود، بنابراین کد تمیزتر و قابل نگهداری‌تر است.
