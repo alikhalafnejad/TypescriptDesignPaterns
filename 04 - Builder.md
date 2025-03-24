@@ -14,7 +14,6 @@
 #### **پیاده‌سازی در TypeScript**
 
 ```typescript
-// کلاس کامپیوتر
 class Computer {
     private cpu: string = "";
     private ram: string = "";
@@ -109,7 +108,6 @@ Computer Specs:
 #### **پیاده‌سازی در TypeScript**
 
 ```typescript
-// کلاس همبرگر
 class Burger {
     private bun: string = "";
     private patty: string = "";
@@ -233,7 +231,6 @@ Burger Details:
 ### **پیاده‌سازی در TypeScript**
 
 ```typescript
-// کلاس درخواست HTTP
 class HttpRequest {
     private url: string = "";
     private method: string = "GET";
